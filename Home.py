@@ -1,10 +1,23 @@
+# -*- coding: utf-8 -*-
+import sys
+import io
 import streamlit as st
+import pandas as pd
+import plotly.express as px
+import io as pyio
+
+# ============================================================
+# إجبار السيرفر على استخدام ترميز UTF-8 (لحل مشكلة العربي)
+# ============================================================
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+# ============================================================
 
 st.set_page_config(page_title="Supermarket Analytics", page_icon="🛒", layout="wide")
 
 # قراءة التصميم
 try:
-    with open("style.css") as f:
+    with open("style.css", encoding="utf-8") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 except FileNotFoundError:
     pass
