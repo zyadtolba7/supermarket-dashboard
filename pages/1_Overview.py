@@ -69,7 +69,8 @@ with col_a:
     fig1 = px.bar(rev_cat, x='net_sales', y='product_category', orientation='h', color='net_sales', color_continuous_scale='Teal', text_auto='.2s')
     fig1.update_layout(showlegend=False, height=400, **chart_layout)
     fig1.update_coloraxes(showscale=False)
-    st.plotly_chart(fig1, use_container_width=True, config={'staticPlot': True}, render_mode='svg')
+    # شيلنا render_mode وخليها staticPlot عشان تشتغل على السيرفر
+    st.plotly_chart(fig1, use_container_width=True, config={'staticPlot': True})
 
 with col_b:
     st.subheader("Sales Trend (Monthly)")
@@ -79,7 +80,7 @@ with col_b:
     trend = trend.sort_values('month_name')
     fig2 = px.line(trend, x='month_name', y='net_sales', markers=True, color_discrete_sequence=['#00E5FF'])
     fig2.update_layout(height=400, **chart_layout)
-    st.plotly_chart(fig2, use_container_width=True, config={'staticPlot': True}, render_mode='svg')
+    st.plotly_chart(fig2, use_container_width=True, config={'staticPlot': True})
 
 # التقرير
 st.markdown("---")
