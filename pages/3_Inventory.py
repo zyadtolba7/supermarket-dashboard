@@ -8,7 +8,8 @@ chart_layout = dict(
     paper_bgcolor='rgba(0,0,0,0)', 
     plot_bgcolor='rgba(0,0,0,0)', 
     font=dict(color='#FAFAFA'), 
-    margin=dict(l=20, r=20, t=40, b=20)
+    margin=dict(l=20, r=20, t=40, b=20),
+    staticPlot=True  # السطر السحري اللي بيثبت الشارت
 )
 
 st.title("📦 Inventory & Store Operations")
