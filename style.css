@@ -1,0 +1,27 @@
+/* تكبير أرقام الكروت */
+[data-testid="stMetricValue"] {
+    font-size: 3.5rem !important;
+    color: #00E5FF !important;
+    font-weight: bold !important;
+}
+
+/* تكبير عناوين الكروت */
+[data-testid="stMetricLabel"] {
+    font-size: 1.5rem !important;
+    color: white !important;
+}
+
+/* تكبير العناوين الرئيسية */
+h1 {
+    font-size: 3.5rem !important;
+}
+
+/* تكبير العناوين الفرعية */
+h2, h3 {
+    font-size: 2.2rem !important;
+}
+
+/* تكبير النصوص العادية */
+p, .stMarkdown {
+    font-size: 1.3rem !important;
+}
