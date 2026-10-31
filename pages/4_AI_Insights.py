@@ -1,30 +1,14 @@
 # -*- coding: utf-8 -*-
-from groq import Groq
 import streamlit as st
+from groq import Groq
 
-st.markdown("""
-<style>
-    /* تكبير النصوص العادية والـ markdown */
-    p, li, .stMarkdown {
-        font-size: 1.25rem !important;
-        line-height: 1.8 !important;
-    }
-    /* تكبير عناوين الـ Insights */
-    strong {
-        font-size: 1.3rem !important;
-        color: #00E5FF !important; /* لون سماوي للعناوين */
-    }
-    /* تكبير عناوين الصفحة */
-    h1 {
-        font-size: 3.5rem !important;
-    }
-</style>
-""", unsafe_allow_html=True)
 # ============================================================
-# ⚠️ حط مفتاح Groq بتاعك هنا (اللي بيبدأ بـ gsk_)
+# قراءة المفتاح من Secrets
 # ============================================================
-GROQ_API_KEY = "ضع_المفتاح_هنا_او_في_سيكريتس"
-# ============================================================
+try:
+    GROQ_API_KEY = st.secrets["GROQ_API_KEY"]
+except (KeyError, FileNotFoundError):
+    GROQ_API_KEY = None
 
 st.title("🤖 AI Business Insights")
 st.markdown("هنا الذكاء الاصطناعي هيقرأ الأرقام ويطلعلك توصيات احترافية.")
@@ -35,12 +19,12 @@ else:
     st.warning("⚠️ رجاءً ارجع للصفحة الرئيسية أولاً لتطبيق الفلاتر.")
     st.stop()
 
-if not GROQ_API_KEY or GROQ_API_KEY == "حط_المفتاح_بتاعك_هنا":
-    st.error("⚠️ مفيش API Key. تأكد إنك حطيت مفتاح Groq في الكود فوق.")
+if not GROQ_API_KEY:
+    st.error("⚠️ مفيش API Key. تأكد إنك حطيت المفتاح في إعدادات Secrets على Streamlit Cloud.")
 else:
     if st.button("✨ توليد التقرير بالـ AI", type="primary", use_container_width=True):
         try:
-            # تجهيز الأرقام كـ نصوص عادية
+            # تجهيز النصوص
             kpis_text = f"""
             - إجمالي المبيعات: ${filtered['net_sales'].sum():,.2f}
             - إجمالي الربح: ${filtered['gross_profit'].sum():,.2f}
@@ -70,27 +54,18 @@ else:
             القواعد: اكتب بالعربي المصري المبسط، وركز على الأرباح.
             """
 
-            # إعداد عميل Groq
             client = Groq(api_key=GROQ_API_KEY)
-            
             st.info("⏳ جاري تحليل البيانات...")
             
-            # طلب الرد من Groq (باستخدام موديل Llama)
-            stream = client.chat.completions.create(
-               model="openai/gpt-oss-120b", # موديل قوي ومجاني
-                messages=[
-                    {"role": "user", "content": prompt}
-                ],
-                stream=True
+            # شيلنا stream=True عشان نتجنب مشكلة الترميز
+            response = client.chat.completions.create(
+                model="openai/gpt-oss-120b",
+                messages=[{"role": "user", "content": prompt}]
             )
 
-            def stream_text():
-                for chunk in stream:
-                    if chunk.choices[0].delta.content:
-                        yield chunk.choices[0].delta.content
-
+            # عرض الرد كامل
             st.markdown("---")
-            st.write_stream(stream_text())
+            st.markdown(response.choices[0].message.content)
             st.success("✅ التقرير جاهز!")
 
         except Exception as e:
