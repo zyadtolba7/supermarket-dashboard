@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
 import sys
-import io
 import streamlit as st
-import pandas as pd
-import plotly.express as px
-import io as pyio
 
 # ============================================================
-# إجبار السيرفر على استخدام ترميز UTF-8 (لحل مشكلة العربي)
+# إجبار السيرفر على استخدام UTF-8 (بطريقة آمنة)
 # ============================================================
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
-sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 # ============================================================
 
 st.set_page_config(page_title="Supermarket Analytics", page_icon="🛒", layout="wide")
