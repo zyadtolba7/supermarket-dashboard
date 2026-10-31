@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -12,13 +13,7 @@ try:
 except FileNotFoundError:
     pass
 
-chart_layout = dict(
-    paper_bgcolor='rgba(0,0,0,0)', 
-    plot_bgcolor='rgba(0,0,0,0)', 
-    font=dict(color='#FAFAFA'), 
-    margin=dict(l=20, r=20, t=40, b=20),
-    staticPlot=True  # السطر السحري اللي بيثبت الشارت
-)
+chart_layout = dict(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color='#FAFAFA'), margin=dict(l=20, r=20, t=40, b=20))
 
 @st.cache_data
 def load_data():
@@ -74,7 +69,7 @@ with col_a:
     fig1 = px.bar(rev_cat, x='net_sales', y='product_category', orientation='h', color='net_sales', color_continuous_scale='Teal', text_auto='.2s')
     fig1.update_layout(showlegend=False, height=400, **chart_layout)
     fig1.update_coloraxes(showscale=False)
-    st.plotly_chart(fig1, use_container_width=True)
+    st.plotly_chart(fig1, use_container_width=True, config={'staticPlot': True})
 
 with col_b:
     st.subheader("Sales Trend (Monthly)")
@@ -84,7 +79,7 @@ with col_b:
     trend = trend.sort_values('month_name')
     fig2 = px.line(trend, x='month_name', y='net_sales', markers=True, color_discrete_sequence=['#00E5FF'])
     fig2.update_layout(height=400, **chart_layout)
-    st.plotly_chart(fig2, use_container_width=True)
+    st.plotly_chart(fig2, use_container_width=True, config={'staticPlot': True})
 
 # التقرير
 st.markdown("---")
@@ -104,7 +99,6 @@ with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
     cat_sales.to_excel(writer, sheet_name='Sales_by_Category', index=False)
     city_sales.to_excel(writer, sheet_name='Sales_by_City', index=False)
     
-    # شارت الفئات
     chart_cat = workbook.add_chart({'type': 'bar'})
     chart_cat.add_series({'name': 'المبيعات', 'categories': ['Sales_by_Category', 1, 0, len(cat_sales), 0], 'values': ['Sales_by_Category', 1, 1, len(cat_sales), 1], 'fill': {'color': '#00E5FF'}})
     chart_cat.set_title({'name': 'أعلى 10 فئات'})
@@ -112,7 +106,6 @@ with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
     chart_cat.set_size({'width': 600, 'height': 400})
     writer.sheets['Sales_by_Category'].insert_chart('D2', chart_cat)
 
-    # شارت المدن
     chart_city = workbook.add_chart({'type': 'column'})
     chart_city.add_series({'name': 'المبيعات', 'categories': ['Sales_by_City', 1, 0, len(city_sales), 0], 'values': ['Sales_by_City', 1, 1, len(city_sales), 1], 'fill': {'color': '#8A2BE2'}})
     chart_city.set_title({'name': 'المبيعات حسب المدينة'})
