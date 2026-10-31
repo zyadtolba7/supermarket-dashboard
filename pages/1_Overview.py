@@ -8,7 +8,7 @@ st.set_page_config(page_title="Overview", page_icon="📊", layout="wide")
 
 # قراءة التصميم
 try:
-    with open("style.css") as f:
+    with open("style.css", encoding="utf-8") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 except FileNotFoundError:
     pass
@@ -69,7 +69,7 @@ with col_a:
     fig1 = px.bar(rev_cat, x='net_sales', y='product_category', orientation='h', color='net_sales', color_continuous_scale='Teal', text_auto='.2s')
     fig1.update_layout(showlegend=False, height=400, **chart_layout)
     fig1.update_coloraxes(showscale=False)
-    st.plotly_chart(fig1, use_container_width=True, config={'staticPlot': True})
+    st.plotly_chart(fig1, use_container_width=True, config={'staticPlot': True}, render_mode='svg')
 
 with col_b:
     st.subheader("Sales Trend (Monthly)")
@@ -79,7 +79,7 @@ with col_b:
     trend = trend.sort_values('month_name')
     fig2 = px.line(trend, x='month_name', y='net_sales', markers=True, color_discrete_sequence=['#00E5FF'])
     fig2.update_layout(height=400, **chart_layout)
-    st.plotly_chart(fig2, use_container_width=True, config={'staticPlot': True})
+    st.plotly_chart(fig2, use_container_width=True, config={'staticPlot': True}, render_mode='svg')
 
 # التقرير
 st.markdown("---")

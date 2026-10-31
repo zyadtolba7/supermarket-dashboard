@@ -1,15 +1,5 @@
 # -*- coding: utf-8 -*-
-import sys
 import streamlit as st
-
-# ============================================================
-# إجبار السيرفر على استخدام UTF-8 (بطريقة آمنة)
-# ============================================================
-if hasattr(sys.stdout, "reconfigure"):
-    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-if hasattr(sys.stderr, "reconfigure"):
-    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
-# ============================================================
 
 st.set_page_config(page_title="Supermarket Analytics", page_icon="🛒", layout="wide")
 
